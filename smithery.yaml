@@ -1,0 +1,28 @@
+# Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
+
+startCommand:
+  type: stdio
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    properties:
+      gigahardApiKey:
+        type: string
+        default: ""
+        description: API key for authenticating requests forwarded to the Next.js backend.
+  commandFunction:
+    # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
+    |-
+    (config) => {
+      // Use the provided API key if available
+      const env = Object.assign({}, process.env, {
+        GIGHARD_API_KEY: config.gigahardApiKey || ""
+      });
+      return {
+        command: 'node',
+        args: ['build/index.js'],
+        env
+      };
+    }
+  exampleConfig:
+    gigahardApiKey: YOUR_API_KEY_HERE
