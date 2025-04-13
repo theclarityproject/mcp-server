@@ -15,10 +15,11 @@ import {
 const NEXTJS_APP_URL = 'https://gigahard.org/'
 const GIGHARD_API_KEY = process.env.GIGAHARD_API_KEY; // API Key for authenticating with the Next.js backend
 
-if (!NEXTJS_APP_URL || !GIGHARD_API_KEY) {
-  // console.error('[MCP-SERVER] Missing NEXTJS_APP_URL or GIGHARD_API_KEY environment variables.'); // Removed log
+if (!NEXTJS_APP_URL) {
+  // console.error('[MCP-SERVER] Missing NEXTJS_APP_URL environment variable.'); // Removed log
   process.exit(1);
 }
+// If GIGHARD_API_KEY is missing, continue running. Tools will still be listable, but API key will be empty.
 
 // Removed MCP_SERVER_PORT as it's not needed for stdio
 
@@ -52,7 +53,7 @@ class GigahardMcpServer {
     this.setupRequestHandlers();
 
     // Error handling
-    this.server.onerror = (error) => {}; // Removed log, keep handler structure if needed
+    this.server.onerror = (error) => { }; // Removed log, keep handler structure if needed
     process.on('SIGINT', async () => {
       await this.server.close();
       process.exit(0);
@@ -74,8 +75,8 @@ class GigahardMcpServer {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            // Use the API key from the environment variable
-            'X-MCP-API-Key': GIGHARD_API_KEY!,
+            // Use the API key from the environment variable if present, else send empty string
+            'X-MCP-API-Key': GIGHARD_API_KEY || '',
           },
         });
 
@@ -112,8 +113,8 @@ class GigahardMcpServer {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            // Use the API key from the environment variable
-            'X-MCP-API-Key': GIGHARD_API_KEY!,
+            // Use the API key from the environment variable if present, else send empty string
+            'X-MCP-API-Key': GIGHARD_API_KEY || '',
           },
           body: JSON.stringify({
             toolName: toolName,
@@ -126,8 +127,8 @@ class GigahardMcpServer {
           // console.error(`[MCP-SERVER] Error from Next.js /call-tool (${response.status}): ${errorBody}`); // Removed log
           let backendError = `Backend error: ${response.statusText}`;
           try {
-              const jsonError = JSON.parse(errorBody);
-              backendError = jsonError.error || backendError;
+            const jsonError = JSON.parse(errorBody);
+            backendError = jsonError.error || backendError;
           } catch { /* Ignore parsing error */ }
           throw new McpError(ErrorCode.InternalError, backendError);
         }
@@ -139,7 +140,7 @@ class GigahardMcpServer {
       } catch (error: any) {
         // console.error(`[MCP-SERVER] Failed to forward CallTool request to Next.js:`, error); // Removed log
         if (error instanceof McpError) {
-            throw error;
+          throw error;
         }
         throw new McpError(ErrorCode.InternalError, `Failed to connect to backend: ${error.message}`);
       }
