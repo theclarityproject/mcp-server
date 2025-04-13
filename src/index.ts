@@ -14,12 +14,14 @@ import {
 // --- Environment Variables ---
 const NEXTJS_APP_URL = 'https://gigahard.org/'
 const GIGAHARD_API_KEY = process.env.GIGAHARD_API_KEY; // API Key for authenticating with the Next.js backend
+const GIGAHARD_MCP_ID = process.env.GIGAHARD_MCP_ID; // Optional MCP ID to specify which MCP to use
 
 if (!NEXTJS_APP_URL) {
   // console.error('[MCP-SERVER] Missing NEXTJS_APP_URL environment variable.'); // Removed log
   process.exit(1);
 }
 // If GIGAHARD_API_KEY is missing, continue running. Tools will still be listable, but API key will be empty.
+// GIGAHARD_MCP_ID is optional - if provided, it will be used to specify which MCP to use
 
 // Removed MCP_SERVER_PORT as it's not needed for stdio
 
@@ -91,7 +93,12 @@ class GigahardMcpServer {
       // console.log(`[MCP-SERVER] ListTools request received. Forwarding to Next.js backend.`); // Removed log
 
       // Forward the request to the Next.js backend
-      const listToolsUrl = `${NEXTJS_APP_URL}/api/mcp/list-tools`;
+      let listToolsUrl = `${NEXTJS_APP_URL}/api/mcp/list-tools`;
+
+      // Add MCP ID to the URL if specified
+      if (GIGAHARD_MCP_ID) {
+        listToolsUrl += `?mcpId=${encodeURIComponent(GIGAHARD_MCP_ID)}`;
+      }
       // console.log(`[MCP-SERVER] Forwarding ListTools request to: ${listToolsUrl}`); // Removed log
 
       try {
@@ -143,7 +150,12 @@ class GigahardMcpServer {
       // console.log(`[MCP-SERVER] Transformed tool name for backend: ${backendToolName}`); // Optional log
 
       // Forward the request to the Next.js backend
-      const callToolUrl = `${NEXTJS_APP_URL}/api/mcp/call-tool`;
+      let callToolUrl = `${NEXTJS_APP_URL}/api/mcp/call-tool`;
+
+      // Add MCP ID to the URL if specified
+      if (GIGAHARD_MCP_ID) {
+        callToolUrl += `?mcpId=${encodeURIComponent(GIGAHARD_MCP_ID)}`;
+      }
       // console.log(`[MCP-SERVER] Forwarding CallTool request for "${backendToolName}" to: ${callToolUrl}`); // Removed log
 
       try {
@@ -193,6 +205,7 @@ class GigahardMcpServer {
     // console.error('[MCP-SERVER] Gigahard MCP server running on stdio');
     // console.error(`[MCP-SERVER] Forwarding requests to Next.js backend: ${NEXTJS_APP_URL}`);
     // console.error(`[MCP-SERVER] Using configured API Key: ${GIGAHARD_API_KEY ? 'Loaded' : 'MISSING!'}`);
+    // console.error(`[MCP-SERVER] Using configured MCP ID: ${GIGAHARD_MCP_ID || 'Not specified - using default'}`);
   }
 }
 

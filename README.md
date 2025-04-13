@@ -45,6 +45,8 @@ npm install -g @lekt9/gigahard-mcp
 
 # Set up your credentials
 export GIGAHARD_API_KEY=your_api_key
+# Optional: Specify a specific MCP ID if you have multiple MCPs
+export GIGAHARD_MCP_ID=your_mcp_id
 
 # Run the server
 gigahard-mcp
@@ -126,6 +128,7 @@ You can now upload this HAR file using the uploader on the Gigahard website.
 ## Environment Variables
 
 - `GIGAHARD_API_KEY`: API key for authenticating with the Gigahard backend
+- `GIGAHARD_MCP_ID`: Optional MCP ID to specify which MCP to use (useful if you have multiple MCPs)
 - `NEXTJS_APP_URL`: URL of the Gigahard backend (defaults to https://gigahard.org/)
 
 ## Technical Details
