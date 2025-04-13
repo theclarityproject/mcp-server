@@ -13,13 +13,13 @@ import {
 
 // --- Environment Variables ---
 const NEXTJS_APP_URL = 'https://gigahard.org/'
-const GIGHARD_API_KEY = process.env.GIGAHARD_API_KEY; // API Key for authenticating with the Next.js backend
+const GIGAHARD_API_KEY = process.env.GIGAHARD_API_KEY; // API Key for authenticating with the Next.js backend
 
 if (!NEXTJS_APP_URL) {
   // console.error('[MCP-SERVER] Missing NEXTJS_APP_URL environment variable.'); // Removed log
   process.exit(1);
 }
-// If GIGHARD_API_KEY is missing, continue running. Tools will still be listable, but API key will be empty.
+// If GIGAHARD_API_KEY is missing, continue running. Tools will still be listable, but API key will be empty.
 
 // Removed MCP_SERVER_PORT as it's not needed for stdio
 
@@ -76,7 +76,7 @@ class GigahardMcpServer {
           headers: {
             'Content-Type': 'application/json',
             // Use the API key from the environment variable if present, else send empty string
-            'X-MCP-API-Key': GIGHARD_API_KEY || '',
+            'X-MCP-API-Key': GIGAHARD_API_KEY || '',
           },
         });
 
@@ -114,7 +114,7 @@ class GigahardMcpServer {
           headers: {
             'Content-Type': 'application/json',
             // Use the API key from the environment variable if present, else send empty string
-            'X-MCP-API-Key': GIGHARD_API_KEY || '',
+            'X-MCP-API-Key': GIGAHARD_API_KEY || '',
           },
           body: JSON.stringify({
             toolName: toolName,
@@ -154,7 +154,7 @@ class GigahardMcpServer {
     // NOTE: Logs were removed to prevent JSON parsing errors when client connects via stdio
     // console.error('[MCP-SERVER] Gigahard MCP server running on stdio');
     // console.error(`[MCP-SERVER] Forwarding requests to Next.js backend: ${NEXTJS_APP_URL}`);
-    // console.error(`[MCP-SERVER] Using configured API Key: ${GIGHARD_API_KEY ? 'Loaded' : 'MISSING!'}`);
+    // console.error(`[MCP-SERVER] Using configured API Key: ${GIGAHARD_API_KEY ? 'Loaded' : 'MISSING!'}`);
   }
 }
 

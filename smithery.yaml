@@ -16,7 +16,7 @@ startCommand:
     (config) => {
       // Use the provided API key if available
       const env = Object.assign({}, process.env, {
-        GIGHARD_API_KEY: config.gigahardApiKey || ""
+        GIGAHARD_API_KEY: config.gigahardApiKey || ""
       });
       return {
         command: 'node',
