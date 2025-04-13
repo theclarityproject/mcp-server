@@ -27,6 +27,26 @@ if (!NEXTJS_APP_URL) {
 // No specific types needed here anymore
 
 // --- Helper Functions ---
+// Helper function to convert camelCase/PascalCase to snake_case
+function toSnakeCase(str: string): string {
+  // Handle potential non-string inputs gracefully
+  if (typeof str !== 'string' || !str) {
+    return str;
+  }
+  return str
+    .replace(/([A-Z])/g, (match) => `_${match.toLowerCase()}`) // Add underscore before uppercase letters and convert them to lowercase
+    .replace(/^_/, ''); // Remove leading underscore if the original string started with uppercase
+}
+
+// Helper function to convert snake_case to camelCase
+function toCamelCase(str: string): string {
+  // Handle potential non-string inputs gracefully
+  if (typeof str !== 'string' || !str) {
+    return str;
+  }
+  return str.replace(/_([a-z])/g, (match, char) => char.toUpperCase());
+}
+
 // Removed hashApiKey and validateApiKey
 
 // --- MCP Server Implementation ---
@@ -88,7 +108,17 @@ class GigahardMcpServer {
 
         const responseData = await response.json();
         // console.log(`[MCP-SERVER] Received ${responseData.tools?.length ?? 0} tools from Next.js backend.`); // Removed log
-        return responseData; // Forward the response directly
+
+        // Transform tool names to snake_case
+        if (responseData.tools && Array.isArray(responseData.tools)) {
+          responseData.tools = responseData.tools.map((tool: any) => ({
+            ...tool,
+            name: toSnakeCase(tool.name),
+          }));
+          // console.log(`[MCP-SERVER] Transformed tool names to snake_case.`); // Optional: Add log if needed
+        }
+
+        return responseData; // Return the modified response
 
       } catch (error: any) {
         // console.error(`[MCP-SERVER] Failed to forward ListTools request to Next.js:`, error); // Removed log
@@ -104,9 +134,13 @@ class GigahardMcpServer {
 
       // console.log(`[MCP-SERVER] CallTool request received for tool: ${toolName}. Forwarding to Next.js backend.`); // Removed log
 
+      // Transform incoming snake_case tool name back to camelCase for the backend
+      const backendToolName = toCamelCase(toolName);
+      // console.log(`[MCP-SERVER] Transformed tool name for backend: ${backendToolName}`); // Optional log
+
       // Forward the request to the Next.js backend
       const callToolUrl = `${NEXTJS_APP_URL}/api/mcp/call-tool`;
-      // console.log(`[MCP-SERVER] Forwarding CallTool request for "${toolName}" to: ${callToolUrl}`); // Removed log
+      // console.log(`[MCP-SERVER] Forwarding CallTool request for "${backendToolName}" to: ${callToolUrl}`); // Removed log
 
       try {
         const response = await fetch(callToolUrl, {
@@ -117,7 +151,7 @@ class GigahardMcpServer {
             'X-MCP-API-Key': GIGAHARD_API_KEY || '',
           },
           body: JSON.stringify({
-            toolName: toolName,
+            toolName: backendToolName, // Send the transformed name
             arguments: toolArgs,
           }),
         });
@@ -134,7 +168,7 @@ class GigahardMcpServer {
         }
 
         const responseData = await response.json();
-        // console.log(`[MCP-SERVER] Received execution result for "${toolName}" from Next.js backend.`); // Removed log
+        // console.log(`[MCP-SERVER] Received execution result for "${backendToolName}" from Next.js backend.`); // Removed log
         return responseData; // Forward the response directly
 
       } catch (error: any) {
