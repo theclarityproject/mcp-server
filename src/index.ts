@@ -38,13 +38,16 @@ function toSnakeCase(str: string): string {
     .replace(/^_/, ''); // Remove leading underscore if the original string started with uppercase
 }
 
-// Helper function to convert snake_case to camelCase
-function toCamelCase(str: string): string {
+// Helper function to convert snake_case to Word With Space
+function snakeToWordWithSpace(str: string): string {
   // Handle potential non-string inputs gracefully
   if (typeof str !== 'string' || !str) {
     return str;
   }
-  return str.replace(/_([a-z])/g, (match, char) => char.toUpperCase());
+  return str
+    .split('_') // Split by underscore
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter of each word
+    .join(' '); // Join with spaces
 }
 
 // Removed hashApiKey and validateApiKey
@@ -134,8 +137,8 @@ class GigahardMcpServer {
 
       // console.log(`[MCP-SERVER] CallTool request received for tool: ${toolName}. Forwarding to Next.js backend.`); // Removed log
 
-      // Transform incoming snake_case tool name back to camelCase for the backend
-      const backendToolName = toCamelCase(toolName);
+      // Transform incoming snake_case tool name to "Word With Space" for the backend
+      const backendToolName = snakeToWordWithSpace(toolName);
       // console.log(`[MCP-SERVER] Transformed tool name for backend: ${backendToolName}`); // Optional log
 
       // Forward the request to the Next.js backend
