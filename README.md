@@ -1,5 +1,7 @@
 # gigahard-mcp-server MCP Server
 
+[![smithery badge](https://smithery.ai/badge/@lekt9/gigahard-mcp)](https://smithery.ai/server/@lekt9/gigahard-mcp)
+
 Smuggle your HAR requests and turn them into MCP-usable tools
 
 This is a TypeScript-based MCP server that implements a simple notes system. It demonstrates core MCP concepts by providing:
@@ -44,6 +46,15 @@ npm run watch
 
 ## Installation
 
+### Installing via Smithery
+
+To install gigahard-mcp-server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@lekt9/gigahard-mcp):
+
+```bash
+npx -y @smithery/cli install @lekt9/gigahard-mcp --client claude
+```
+
+### Installing Manually
 To use with Claude Desktop, add the server config:
 
 On MacOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
