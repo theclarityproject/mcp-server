@@ -27,15 +27,16 @@ if (!NEXTJS_APP_URL) {
 // No specific types needed here anymore
 
 // --- Helper Functions ---
-// Helper function to convert camelCase/PascalCase to snake_case
+// Helper function to convert a string with spaces to snake_case
 function toSnakeCase(str: string): string {
   // Handle potential non-string inputs gracefully
   if (typeof str !== 'string' || !str) {
     return str;
   }
   return str
-    .replace(/([A-Z])/g, (match) => `_${match.toLowerCase()}`) // Add underscore before uppercase letters and convert them to lowercase
-    .replace(/^_/, ''); // Remove leading underscore if the original string started with uppercase
+    .trim() // Remove leading/trailing whitespace
+    .replace(/\s+/g, '_') // Replace one or more spaces with a single underscore
+    .toLowerCase(); // Convert the entire string to lowercase
 }
 
 // Helper function to convert snake_case to Word With Space
