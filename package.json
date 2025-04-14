@@ -1,11 +1,11 @@
 {
-  "name": "gigahard-mcp-server",
+  "name": "clarity-mcp-server",
   "version": "0.1.0",
   "description": "Smuggle your HAR requests and turn them into MCP-usable tools",
   "private": true,
   "type": "module",
   "bin": {
-    "gigahard-mcp-server": "./build/index.js"
+    "clarity-mcp-server": "./build/index.js"
   },
   "files": [
     "build"

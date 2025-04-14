@@ -6,11 +6,11 @@ startCommand:
     # JSON Schema defining the configuration options for the MCP.
     type: object
     properties:
-      gigahardApiKey:
+      clarityApiKey:
         type: string
         default: ""
         description: API key for authenticating requests forwarded to the Next.js backend.
-      gigahardMcpId:
+      clarityMcpId:
         type: string
         default: ""
         description: Optional MCP ID to specify which MCP to use.
@@ -20,8 +20,8 @@ startCommand:
     (config) => {
       // Use the provided API key and MCP ID if available
       const env = Object.assign({}, process.env, {
-        GIGAHARD_API_KEY: config.gigahardApiKey || "",
-        GIGAHARD_MCP_ID: config.gigahardMcpId || ""
+        CLARITY_API_KEY: config.clarityApiKey || "",
+        CLARITY_MCP_ID: config.clarityMcpId || ""
       });
       return {
         command: 'node',
@@ -30,5 +30,5 @@ startCommand:
       };
     }
   exampleConfig:
-    gigahardApiKey: YOUR_API_KEY_HERE
-    gigahardMcpId: OPTIONAL_MCP_ID_HERE
+    clarityApiKey: YOUR_API_KEY_HERE
+    clarityMcpId: OPTIONAL_MCP_ID_HERE

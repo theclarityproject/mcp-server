@@ -12,16 +12,16 @@ import {
 // Removed crypto import as hashing/validation moved
 
 // --- Environment Variables ---
-const NEXTJS_APP_URL = 'https://gigahard.org/'
-const GIGAHARD_API_KEY = process.env.GIGAHARD_API_KEY; // API Key for authenticating with the Next.js backend
-const GIGAHARD_MCP_ID = process.env.GIGAHARD_MCP_ID; // Optional MCP ID to specify which MCP to use
+const NEXTJS_APP_URL = 'https://mcp.theclarityproject.net/'
+const CLARITY_API_KEY = process.env.CLARITY_API_KEY; // API Key for authenticating with the Next.js backend
+const CLARITY_MCP_ID = process.env.CLARITY_MCP_ID; // Optional MCP ID to specify which MCP to use
 
 if (!NEXTJS_APP_URL) {
   // console.error('[MCP-SERVER] Missing NEXTJS_APP_URL environment variable.'); // Removed log
   process.exit(1);
 }
-// If GIGAHARD_API_KEY is missing, continue running. Tools will still be listable, but API key will be empty.
-// GIGAHARD_MCP_ID is optional - if provided, it will be used to specify which MCP to use
+// If CLARITY_API_KEY is missing, continue running. Tools will still be listable, but API key will be empty.
+// CLARITY_MCP_ID is optional - if provided, it will be used to specify which MCP to use
 
 // Removed MCP_SERVER_PORT as it's not needed for stdio
 
@@ -57,14 +57,14 @@ function snakeToWordWithSpace(str: string): string {
 
 // --- MCP Server Implementation ---
 
-class GigahardMcpServer {
+class ClarityMcpServer {
   private server: Server;
   // Removed SSE transports store
 
   constructor() {
     this.server = new Server(
       {
-        name: 'gigahard-mcp-server',
+        name: 'clarity-mcp-server',
         version: '0.1.0',
         description: 'Smuggle your HAR requests and turn them into MCP-usable tools',
       },
@@ -96,8 +96,8 @@ class GigahardMcpServer {
       let listToolsUrl = `${NEXTJS_APP_URL}/api/mcp/list-tools`;
 
       // Add MCP ID to the URL if specified
-      if (GIGAHARD_MCP_ID) {
-        listToolsUrl += `?mcpId=${encodeURIComponent(GIGAHARD_MCP_ID)}`;
+      if (CLARITY_MCP_ID) {
+        listToolsUrl += `?mcpId=${encodeURIComponent(CLARITY_MCP_ID)}`;
       }
       // console.log(`[MCP-SERVER] Forwarding ListTools request to: ${listToolsUrl}`); // Removed log
 
@@ -107,7 +107,7 @@ class GigahardMcpServer {
           headers: {
             'Content-Type': 'application/json',
             // Use the API key from the environment variable if present, else send empty string
-            'X-MCP-API-Key': GIGAHARD_API_KEY || '',
+            'X-MCP-API-Key': CLARITY_API_KEY || '',
           },
         });
 
@@ -153,8 +153,8 @@ class GigahardMcpServer {
       let callToolUrl = `${NEXTJS_APP_URL}/api/mcp/call-tool`;
 
       // Add MCP ID to the URL if specified
-      if (GIGAHARD_MCP_ID) {
-        callToolUrl += `?mcpId=${encodeURIComponent(GIGAHARD_MCP_ID)}`;
+      if (CLARITY_MCP_ID) {
+        callToolUrl += `?mcpId=${encodeURIComponent(CLARITY_MCP_ID)}`;
       }
       // console.log(`[MCP-SERVER] Forwarding CallTool request for "${backendToolName}" to: ${callToolUrl}`); // Removed log
 
@@ -164,7 +164,7 @@ class GigahardMcpServer {
           headers: {
             'Content-Type': 'application/json',
             // Use the API key from the environment variable if present, else send empty string
-            'X-MCP-API-Key': GIGAHARD_API_KEY || '',
+            'X-MCP-API-Key': CLARITY_API_KEY || '',
           },
           body: JSON.stringify({
             toolName: backendToolName, // Send the transformed name
@@ -202,15 +202,15 @@ class GigahardMcpServer {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
     // NOTE: Logs were removed to prevent JSON parsing errors when client connects via stdio
-    // console.error('[MCP-SERVER] Gigahard MCP server running on stdio');
+    // console.error('[MCP-SERVER] Clarity MCP server running on stdio');
     // console.error(`[MCP-SERVER] Forwarding requests to Next.js backend: ${NEXTJS_APP_URL}`);
-    // console.error(`[MCP-SERVER] Using configured API Key: ${GIGAHARD_API_KEY ? 'Loaded' : 'MISSING!'}`);
-    // console.error(`[MCP-SERVER] Using configured MCP ID: ${GIGAHARD_MCP_ID || 'Not specified - using default'}`);
+    // console.error(`[MCP-SERVER] Using configured API Key: ${CLARITY_API_KEY ? 'Loaded' : 'MISSING!'}`);
+    // console.error(`[MCP-SERVER] Using configured MCP ID: ${CLARITY_MCP_ID || 'Not specified - using default'}`);
   }
 }
 
 // --- Start the Server ---
-const serverInstance = new GigahardMcpServer();
+const serverInstance = new ClarityMcpServer();
 serverInstance.run().catch(error => {
   // console.error('[MCP-SERVER] Failed to start:', error); // Removed log
   process.exit(1);

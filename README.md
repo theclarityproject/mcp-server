@@ -1,18 +1,18 @@
-# Gigahard MCP Bootleg Market
+# Clarity MCP Bootleg Market
 
 Turn browser traffic into tool calls. Smuggle your network requests into an MCP.
 
 ## What's This All About?
 
-Gigahard is where you come when you need to get your hands on some Model Context Protocols (MCPs). Our server connects AI assistants like Claude with web APIs extracted from your HAR files. Think of it as a way to "borrow" functionality from websites and turn it into something AI can use.
+Clarity is where you come when you need to get your hands on some Model Context Protocols (MCPs). Our server connects AI assistants like Claude with web APIs extracted from your HAR files. Think of it as a way to "borrow" functionality from websites and turn it into something AI can use.
 
 ## How It Works
 
 ```mermaid
 sequenceDiagram
     participant Client as MCP Client (Claude)
-    participant Server as Gigahard Server
-    participant Backend as Gigahard Backend
+    participant Server as Clarity Server
+    participant Backend as Clarity Backend
     participant API as Target Web APIs
 
     note over Client,API: HAR File Processing
@@ -41,22 +41,22 @@ sequenceDiagram
 
 ```bash
 # Install the package
-npm install -g @lekt9/gigahard-mcp
+npm install -g @lekt9/clarity-mcp
 
 # Set up your credentials
-export GIGAHARD_API_KEY=your_api_key
+export CLARITY_API_KEY=your_api_key
 # Optional: Specify a specific MCP ID if you have multiple MCPs
-export GIGAHARD_MCP_ID=your_mcp_id
+export CLARITY_MCP_ID=your_mcp_id
 
 # Run the server
-gigahard-mcp
+clarity-mcp
 ```
 
 ## Creating MCPs
 
 To create your own Model Context Protocols from HAR files:
 
-1. Visit [https://www.gigahard.org](https://www.gigahard.org)
+1. Visit [https://www.clarity.org](https://www.clarity.org)
 2. Upload your HAR file
 3. The platform will process the file and generate the necessary tools
 4. Obtain your API key from the website
@@ -111,7 +111,7 @@ Once you've captured the necessary activity, right-click anywhere in the list of
 - Select "Save all as HAR with content" (or similar wording like "Export HAR...").
 - Choose a location to save the `.har` file.
 
-You can now upload this HAR file using the uploader on the Gigahard website.
+You can now upload this HAR file using the uploader on the Clarity website.
 
 > **Important**: HAR files can contain sensitive information like cookies, authentication tokens, and personal data. Handle them securely and avoid sharing them publicly.
 
@@ -121,15 +121,15 @@ You can now upload this HAR file using the uploader on the Gigahard website.
 2. Open Claude settings and navigate to the MCP section
 3. Add a new MCP server with this command:
    ```
-   npx -y @smithery/cli@latest install @lekt9/gigahard-mcp --claude
+   npx -y @smithery/cli@latest install @lekt9/clarity-mcp --claude
    ```
-4. Start a conversation with Claude and use the tools provided by your Gigahard MCP
+4. Start a conversation with Claude and use the tools provided by your Clarity MCP
 
 ## Environment Variables
 
-- `GIGAHARD_API_KEY`: API key for authenticating with the Gigahard backend
-- `GIGAHARD_MCP_ID`: Optional MCP ID to specify which MCP to use (useful if you have multiple MCPs)
-- `NEXTJS_APP_URL`: URL of the Gigahard backend (defaults to https://gigahard.org/)
+- `CLARITY_API_KEY`: API key for authenticating with the Clarity backend
+- `CLARITY_MCP_ID`: Optional MCP ID to specify which MCP to use (useful if you have multiple MCPs)
+- `NEXTJS_APP_URL`: URL of the Clarity backend (defaults to https://clarity.org/)
 
 ## Technical Details
 
@@ -138,7 +138,7 @@ You can now upload this HAR file using the uploader on the Gigahard website.
 The server follows a simple proxy architecture:
 
 1. **MCP Protocol Handling**: Implements the MCP protocol for client communication
-2. **Request Forwarding**: Forwards client requests to the Gigahard backend
+2. **Request Forwarding**: Forwards client requests to the Clarity backend
 3. **Response Transformation**: Transforms responses to match MCP protocol requirements
 
 ### Key Components
@@ -154,8 +154,8 @@ To run the server in development mode:
 
 ```bash
 # Clone the repository
-git clone https://github.com/lekt9/gigahard-mcp.git
-cd gigahard-mcp
+git clone https://github.com/lekt9/clarity-mcp.git
+cd clarity-mcp
 
 # Install dependencies
 npm install
@@ -167,7 +167,7 @@ npm run build
 ## Limitations
 
 - The server requires a valid API key to make authenticated requests to the backend
-- Tool execution depends on the availability of the Gigahard backend
+- Tool execution depends on the availability of the Clarity backend
 - The server does not cache tool definitions or results
 
 ## License
