@@ -56,7 +56,7 @@ clarity-mcp
 
 To create your own Model Context Protocols from HAR files:
 
-1. Visit [https://www.clarity.org](https://www.clarity.org)
+1. Visit [https://www.theclarityproject.net](https://www.theclarityproject.net)
 2. Upload your HAR file
 3. The platform will process the file and generate the necessary tools
 4. Obtain your API key from the website
